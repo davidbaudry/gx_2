@@ -1,0 +1,7 @@
+Options +FollowSymlinks
+RewriteEngine On
+
+# redirection des pages 
+RewriteRule ^$   content/main.php       [NC,QSA,L] 
+RewriteRule ^index.html$   content/main.php       [NC,QSA,L] 
+RewriteRule ^index.php$   content/main.php       [NC,QSA,L] 
