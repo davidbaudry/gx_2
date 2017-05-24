@@ -2,7 +2,6 @@
 <html class="no-js" lang="">
     <?php
     include_once '../includes/config.php';
-    include_once INC . 'protection.php';
     include_once INC . 'header.php';
     ?>
     <article>
