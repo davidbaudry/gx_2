@@ -1,7 +1,7 @@
  <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>BoardGame Scorer [2]</title>
+        <title><?php echo SITENAME; ?></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="<?php echo CSSROOT; ?>normalize.css">
@@ -11,12 +11,12 @@
     <body>
         <div class="header-container">
             <header class="wrapper clearfix">
-                <h1 class="title"><a href="<?php echo LINK_BASE_URL; ?>/">BoardGame Scorer [2]</a></h1>
+                <h1 class="title"><a href="<?php echo LINK_BASE_URL; ?>/"><?php echo SITENAME; ?></a></h1>
                 <nav>
                     <ul>
                         <li><a href="<?php echo LINK_BASE_URL; ?>content/gameplay.php">Les parties</a></li>
                         <li><a href="<?php echo LINK_BASE_URL; ?>content/jeux.php">Les jeux</a></li>
-                        
+
                         <li><a href="<?php echo LINK_BASE_URL; ?>content/joueurs.php">Les joueurs</a></li>
                     </ul>
                 </nav>
