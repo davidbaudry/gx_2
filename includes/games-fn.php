@@ -16,37 +16,6 @@ function gamesList()
     return $games;
 }
 
-function getGameFromId($game_id)
-{
-    global $database;
-       
-    $q = '
-        SELECT g.id, g.name AS gamename, g.is_extension, g.is_collaborative, g.has_invert_score, a.firstname, a.lastname, e.name AS editorname, img_url
-        FROM games g
-        INNER JOIN authors a ON(a.id = g.author_id)
-        INNER JOIN editors e ON(e.id = g.editor_id)
-        WHERE g.id = "' . ($game_id) . '";';
-    
-    $game = $database->get_row($q, true);
-    return $game;
-}
-
-function getGameTopScores($game_id, $top = 3)
-{
-    global $database;
-       
-    $q = '
-        SELECT score, firstname, lastname
-        FROM gameplay_lines l
-        INNER JOIN gameplay g ON(g.id = l.gameplay_id)
-        INNER JOIN players p ON(p.id = l.player_id)
-        WHERE g.game_id = ' . ($game_id) . '
-        ORDER BY score DESC
-        LIMIT ' . ($top) . ';';
-    
-    $scores = $database->get_results($q, true);
-    return $scores;
-}
 
 function insertGame($data) {
     //print_r($data);

@@ -17,9 +17,9 @@ if (isset($_GET['g'])) {
         $boardgame = new Boardgame($boardgame_manager->get($boardgame_id));
 
 
-        // todo : Virer ceta ncien code - tout passer en OO
+        // todo : Virer cet ancien code - tout passer en OO
         /*
-        $game_info = getGameFromId($game_id);
+
 
         // nombre de parties jouées
         $nb_gameplay = getNbPlayedGameplays($game_id);
@@ -42,44 +42,52 @@ if (isset($_GET['g'])) {
     <section>
         <h2><?php echo $boardgame->getName(); ?></h2>
         <ul>
-            <li class="cleanli">Auteur : <a href="#">
-                    <?php echo $boardgame->getAuthor(); ?></a></li>
-            <li class="cleanli">Auteur 2 : <a
-                    href="#"><?php echo $boardgame->getAuthor_second(); ?></a></li>
-            <li class="cleanli">Editeur : <a href="#"><?php echo $boardgame->getEditor(); ?></a>
+            <li class="cleanli">
+                Auteur : <a href="#"><?php echo $boardgame->getAuthor(); ?></a>
             </li>
-            <li class="cleanli">Est collaboratif
-                : <?php echo $boardgame->getIs_collaborative(); ?></li>
-            <li class="cleanli">Est une extension
-                : <?php echo $boardgame->getIs_extension(); ?></li>
-            <li class="cleanli">Le score est inversé
-                : <?php echo $boardgame->getHas_invert_score(); ?></li>
+            <li class="cleanli">
+                Auteur 2 : <a href="#"><?php echo $boardgame->getAuthor_second(); ?></a>
+            </li>
+            <li class="cleanli">
+                Editeur : <a href="#"><?php echo $boardgame->getEditor(); ?></a>
+            </li>
+            <li class="cleanli">
+                Est collaboratif : <?php echo $boardgame->getIs_collaborative(); ?>
+            </li>
+            <li class="cleanli">
+                Est une extension : <?php echo $boardgame->getIs_extension(); ?>
+            </li>
+            <li class="cleanli">
+                Le score est inversé : <?php echo $boardgame->getHas_invert_score(); ?>
+            </li>
+            <?php
+            if ($boardgame->getImg_url()) {
+                echo '<li class="cleanli"><img src="' . $boardgame->getImg_url() . '"></li>';
+            }
+            ?>
         </ul>
     </section>
-    <?php
-    if ($boardgame->getImg_url()) {
-        echo '<img src="' . $boardgame->getImg_url() . '">';
-    }
-    ?>
+
+    <!-- Section présentant les meilleurs scores à ce jeu -->
     <section>
         <h3>Top scores</h3>
         <?php
-        die(':todo');
-        if ($display_players_info) {
-            $top_scores = getGameTopScores($game_id, 5);
-            //var_dump($top_scores);
-            echo '<ul>';
-            $i = 0;
-            foreach ($top_scores as $score) {
-                $i++;
-                echo '<li class="cleanli">';
-                echo $i . ' > ' . $score->firstname . ' ' . $score->lastname . ' : ' . $score->score;
-                echo '</li>';
-            }
-            echo '</ul>';
+        // On utilise une méthode statique de BoardgameManager pour rechercher les meilleurs scores :
+        $top_scores = BoardgameManager::getTopScores($boardgame->getId(),
+            $boardgame->getHas_invert_score());
+        // display
+        echo '<ul>';
+        $compteur = 1;
+        foreach ($top_scores as $score) {
+            echo '<li class="cleanli">';
+            echo $compteur++ . ' : ' . $score['firstname'] . ' ' . $score['lastname'] . ' : ' . $score['score'];
+            echo '</li>';
         }
+        echo '</ul>';
+
         ?>
     </section>
+
     <section>
         <h3>Parties jouées : <?php echo $nb_gameplay->C; ?></h3>
         <?php
