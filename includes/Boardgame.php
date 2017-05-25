@@ -87,9 +87,8 @@ class boardgame
      */
 
     // SETTERS
-    private function setId(
-        $known_id
-    ) {
+    private function setId($known_id)
+    {
         $id = (int)$known_id;
         if ($id) {
             return $id;
@@ -99,64 +98,57 @@ class boardgame
         }
     }
 
-    private function setName(
-        $value
-    ) {
+    private function setName($value)
+    {
         $this->_name = $value;
     }
 
-    private
-    function setAuthor_id(
-        $value
-    ) {
+    private function setAuthor_id($value)
+    {
         $this->_author_id = $value;
     }
 
-    private function setAuthor_second_id(
-        $value
-    ) {
+    private function setAuthor_second_id($value)
+    {
         $this->_author_second_id = $value;
     }
 
-    private
-    function setEditor_id(
-        $value
-    ) {
+    private function setEditor_id($value)
+    {
         $this->_editor_id = $value;
     }
 
-    private function setDescription(
-        $value
-    ) {
+    private function setDescription($value)
+    {
         $this->_description = $value;
     }
 
-    private
-    function setIs_extension(
-        $value
-    ) {
+    private function setIs_extension($value)
+    {
         $this->_is_extension = $value;
     }
 
-    private function setIs_collaborative(
-        $value
-    ) {
+    private function setIs_collaborative($value)
+    {
         $this->_is_collaborative = $value;
     }
 
-    private function setHas_invert_score(
-        $value
-    ) {
+    private function setHas_invert_score($value)
+    {
         $this->_has_invert_score = $value;
     }
 
-    private function setImg_url(
-        $value
-    ) {
+    private function setImg_url($value)
+    {
         $this->_img_url = $value;
     }
 
     // GETTERS
+    public function getId()
+    {
+        return $this->_id;
+    }
+
     public function getName()
     {
         return $this->_name;
