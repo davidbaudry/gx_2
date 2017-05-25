@@ -2,6 +2,7 @@
 
 /*
  * Une simple classe de connexion à la base de données
+ * Using PDO
  */
 
 class Database
