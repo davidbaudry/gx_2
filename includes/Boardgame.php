@@ -6,7 +6,10 @@
 
 class boardgame
 {
+    // constantes de classe
+    const NO_AUTHOR = 'Pas d\'auteur';
 
+    // déclaration des attributs
     private $_id;
     private $_name;
     private $_author_id;
@@ -110,7 +113,11 @@ class boardgame
 
     private function setAuthor_second_id($value)
     {
-        $this->_author_second_id = $value;
+        if ($value) {
+            $this->_author_second_id = $value;
+        } else {
+            $this->_author_second_id = self::NO_AUTHOR;
+        }
     }
 
     private function setEditor_id($value)
@@ -156,6 +163,7 @@ class boardgame
 
     public function getAuthor()
     {
+        // ici on va faire appel à la classe authors afin de retourner les infos pratiques
         return $this->_author_id;
     }
 
