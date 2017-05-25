@@ -21,79 +21,42 @@ class boardgame
     private $_has_invert_score;
     private $_img_url;
 
-    public function __construct($known_id)
+    public function __construct(array $boardgame_data)
     {
-        // On passe l'id demandé
-        $this->_id = $this->setId($known_id);
-        // si ok on charge tout depuis la BDD
-        if ($this->_id) {
-            $this->loadData();
-        }
-    }
-
-    /*
-     * La fonction load à pour responsabilité de récupérer en BDD les données liées à l'id
-     * Elle appelera ensuite l'hydratation avec le tableau de données
-    */
-    private function loadData()
-    {
-        // on utilise la classe database surtout pour se connecter, et grace à SPL autoload
-        $database = new Database();
-        // Récupération de la connexion
-        $cx = $database->getCx();
-        // préparation de la requête
-        $query = $cx->prepare(
-            'SELECT 
-                `id`, 
-                `name`, 
-                `author_id`,
-                `author_second_id`, 
-                `editor_id`, 
-                `description`, 
-                `is_extension`, 
-                `is_collaborative`, 
-                `has_invert_score`, 
-                `img_url` 
-            FROM `games` 
-            WHERE `id` = :id'
-        );
-        // Passage de la requête avec les paramètres + test de la validité de la réponse
-        if ($query->execute(array('id' => $this->_id))) {
-            $boardgame_data = $query->fetch();
-            $this->hydrate($boardgame_data);
-        } else {
-            trigger_error('Boardgame id unknown (bg20)', E_USER_WARNING);
-            return false;
-        }
+        $this->hydrate($boardgame_data);
     }
 
     /*
      * La fonction d'hydratation va hydrater les attributs via les setters (contrôle) avec les
      * données venant de la DBB (ou autre)
      */
-    private function hydrate($boardgame_data)
+    private function hydrate(array $boardgame_data)
     {
-        //print_r($boardgame_data);
-        foreach ($boardgame_data as $key => $value) {
-            $method = 'set' . ucfirst($key);
-            if (method_exists($this, $method)) {
-                $this->$method($value);
+        if ($boardgame_data) {
+            foreach ($boardgame_data as $key => $value) {
+                $method = 'set' . ucfirst($key);
+                if (method_exists($this, $method)) {
+                    $this->$method($value);
+                }
             }
+        } else {
+            trigger_error('Boardgame id unknown (bg30)', E_USER_WARNING);
+            $this->setName('Unknown');
+            return false;
         }
+
     }
-
-
 
     /*
      * Ci-dessous : SETTERS & GETTERS
      */
 
     // SETTERS
-    private function setId($known_id)
+    private function setId($value)
     {
-        $id = (int)$known_id;
+        $id = (int)$value;
         if ($id) {
-            return $id;
+            $this->_id = $id;
         } else {
             trigger_error('Boardgame id undefined (bg10)', E_USER_WARNING);
             return false;

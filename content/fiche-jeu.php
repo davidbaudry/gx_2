@@ -7,12 +7,17 @@ include_once INC . 'header.php';
 $display_players_info = false;
 
 if (isset($_GET['g'])) {
-    $known_id = (int)$_GET['g'];
-    if ($known_id) {
-        // infos sur le jeu
-        $boardgame = new Boardgame($known_id);
+    $boardgame_id = (int)$_GET['g'];
+    if ($boardgame_id) {
+
+        // L'objet instancié de la classe manager collecte les données
+        $boardgame_manager = new BoardgameManager();
+
+        // L'objet instancié de la classe boardgame est hydraté avec les données ransmises par le manager
+        $boardgame = new Boardgame($boardgame_manager->get($boardgame_id));
 
 
+        // todo : Virer ceta ncien code - tout passer en OO
         /*
         $game_info = getGameFromId($game_id);
 
