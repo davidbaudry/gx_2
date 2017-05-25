@@ -24,7 +24,7 @@ class boardgame
         $this->_id = $this->setId($known_id);
         // si ok on charge tout depuis la BDD
         if ($this->_id) {
-            $this->loadFromDatabase();
+            $this->loadData();
         }
     }
 
@@ -32,7 +32,7 @@ class boardgame
      * La fonction load à pour responsabilité de récupérer en BDD les données liées à l'id
      * Elle appelera ensuite l'hydratation avec le tableau de données
     */
-    private function loadFromDatabase()
+    private function loadData()
     {
         // on utilise la classe database surtout pour se connecter, et grace à SPL autoload
         $database = new Database();
@@ -68,9 +68,8 @@ class boardgame
      * La fonction d'hydratation va hydrater les attributs via les setters (contrôle) avec les
      * données venant de la DBB (ou autre)
      */
-    private function hydrate(
-        $boardgame_data
-    ) {
+    private function hydrate($boardgame_data)
+    {
         //print_r($boardgame_data);
         foreach ($boardgame_data as $key => $value) {
             $method = 'set' . ucfirst($key);
