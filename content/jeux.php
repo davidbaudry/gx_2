@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="">
     <?php
-    include_once '../includes/config.php';
+    include_once '../includes/init.php';
     include_once INC . 'header.php';
     
     $authorList =  authorList();

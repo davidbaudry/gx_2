@@ -30,7 +30,7 @@ class boardgame
      * La fonction d'hydratation va hydrater les attributs via les setters (contrôle) avec les
      * données venant de la DBB (ou autre)
      */
-    private function hydrate(array $boardgame_data)
+    protected function hydrate(array $boardgame_data)
     {
         if ($boardgame_data) {
             foreach ($boardgame_data as $key => $value) {

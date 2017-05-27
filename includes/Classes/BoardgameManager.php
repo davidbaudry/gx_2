@@ -37,7 +37,7 @@ class boardgameManager
                 `is_collaborative`, 
                 `has_invert_score`, 
                 `img_url` 
-            FROM `games` 
+            FROM `boardgames` 
             WHERE `id` = :id'
         );
         // Passage de la requête avec les paramètres + test de la validité de la réponse
@@ -79,7 +79,7 @@ class boardgameManager
             SELECT score, firstname, lastname
             FROM gameplay_lines l
               INNER JOIN gameplay g ON(g.id = l.gameplay_id)
-              INNER JOIN players p ON(p.id = l.player_id)
+              INNER JOIN people p ON(p.id = l.player_id)
             WHERE g.game_id = :id
             ORDER BY score ASC
             LIMIT 10');
@@ -88,7 +88,7 @@ class boardgameManager
             SELECT score, firstname, lastname
             FROM gameplay_lines l
               INNER JOIN gameplay g ON(g.id = l.gameplay_id)
-              INNER JOIN players p ON(p.id = l.player_id)
+              INNER JOIN people p ON(p.id = l.player_id)
             WHERE g.game_id = :id
             ORDER BY score DESC
             LIMIT 10');
