@@ -200,20 +200,6 @@ function getGameplaysListFromGameid($game_id)
     return $gameplays;
 }
 
-// retouve les participants d'un jeu
-function getPlayersFromGameplayId($gameplay_id)
-{
-    global $database;
-    $q = '
-            SELECT p.firstname, p.lastname, gpl.score
-            FROM gameplay_lines gpl
-            INNER JOIN players p ON (p.id = gpl.player_id)
-            WHERE gpl.gameplay_id = ' . ($gameplay_id) . '
-            ORDER BY score ASC';
-    $playersFromGameplayId = $database->get_results($q, true);
-    return $playersFromGameplayId;       
-    
-}
 
 function insertGameplay($data)
 {
@@ -285,23 +271,4 @@ function getNbPlayedGameplaysByPlayers($player_id)
     $nb = $database->get_row($q, true);
     return $nb;
 }
-
-
-function getAverageScorePerPlayerForGame($game_id)
-{
-    global $database;
-    $q = '
-            SELECT COUNT(gp.id) AS nb, p.firstname, p.lastname, ROUND(AVG(gpl.score),0) AS avgs
-            FROM gameplay gp 
-            INNER JOIN gameplay_lines gpl ON (gpl.gameplay_id = gp.id)
-            INNER JOIN games gm ON (gm.id = gp.game_id)
-            INNER JOIN players p ON (p.id = gpl.player_id)
-            WHERE gp.game_id = ' . ($game_id) . '
-            GROUP BY p.id
-            ORDER BY avgs DESC';
-    $averageScorePerPlayerForGame = $database->get_results($q, true);
-    return $averageScorePerPlayerForGame;       
-    
-}
-
 

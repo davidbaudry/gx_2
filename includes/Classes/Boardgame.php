@@ -51,16 +51,38 @@ class boardgame
     /*
      * MAGICs
      */
-    public function __isset($nom)
+    public function __isset($attribut_name)
     {
-        return isset($this->$nom);
+        return isset($this->$attribut_name);
     }
 
-    public function __unset($nom)
+    public function __unset($attribut_name)
     {
-        if (isset($this->$nom)) {
-            unset($this->$nom);
+        if (isset($this->$attribut_name)) {
+            unset($this->$attribut_name);
         }
+    }
+
+    public function __call($nom, $arguments)
+    {
+        echo 'La méthode <strong>', $nom, '</strong> a été appelée alors qu\'elle n\'existe pas ! Ses arguments étaient les suivants : <strong>', implode($arguments,
+            '</strong>, <strong>'), '</strong><br />';
+    }
+    
+    public function __get($name)
+    {
+        echo "Récupération de '$name'\n";
+        if (isset($this->$name)) {
+            return $this->$name;
+        }
+
+        $trace = debug_backtrace();
+        trigger_error(
+            'Propriété non-définie via __get() : ' . $name .
+            ' dans ' . $trace[0]['file'] .
+            ' à la ligne ' . $trace[0]['line'],
+            E_USER_NOTICE);
+        return null;
     }
 
 

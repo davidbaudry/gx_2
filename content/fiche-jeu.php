@@ -16,18 +16,13 @@ if (isset($_GET['g'])) {
         // L'objet instancié de la classe boardgame est hydraté avec les données transmises par le manager
         $boardgame = new Boardgame($boardgame_manager->get($boardgame_id));
 
-        
-        // todo : Virer cet ancien code - tout passer en OO
-        /*
+        // On a également besoin d'un manager pour le sparties
+        $boardgame_plays_manager = new BoardgamePlaysManager();
 
-
-        // nombre de parties jouées
-        $nb_gameplay = getNbPlayedGameplays($game_id);
-
-        // joueurs
-        if ($nb_gameplay) {
-            $players_info = getAverageScorePerPlayerForGame($game_id);
-            $display_players_info = true;
+        /* test d'utilisation de méthodes magiques
+        $boardgame->plop('123');
+        if (isset($boardgame->_name)) {
+            echo 'Existe';
         }
         */
     } else {
@@ -37,10 +32,10 @@ if (isset($_GET['g'])) {
 ?>
 <article>
     <header>
-        <h2>Fiche n°<span class="invert_bw"><?php echo $boardgame->getId(); ?></span></h2>
+        <h1>Fiche <span class="invert_bw"><?php echo $boardgame->getId(); ?></span>
+            : <?php echo $boardgame->getName(); ?></h1>
     </header>
     <section>
-        <h2><?php echo $boardgame->getName(); ?></h2>
         <ul>
             <li class="cleanli">
                 Auteur : <a href="#"><?php echo $boardgame->getAuthor(); ?></a>
@@ -68,12 +63,21 @@ if (isset($_GET['g'])) {
         </ul>
     </section>
 
+    <h2>Les parties & les joueurs :</h2>
+    <section>
+        <?php
+        // On utilise une méthode statique de BoardgameManager pour rechercher le nombre de parties jouées :
+        $boardgame_plays = $boardgame_plays_manager->getNbPlayedGames($boardgame->getId());
+        ?>
+        <h3>Parties jouées : <?php echo $boardgame_plays['NB']; ?></h3>
+    </section>
+
     <!-- Section présentant les meilleurs scores à ce jeu -->
     <section>
         <h3>Top scores</h3>
         <?php
         // On utilise une méthode statique de BoardgameManager pour rechercher les meilleurs scores :
-        $top_scores = BoardgameManager::getTopScores($boardgame->getId(),
+        $top_scores = $boardgame_plays_manager::getTopScores($boardgame->getId(),
             $boardgame->getHas_invert_score());
         // display
         echo '<ul>';
@@ -89,35 +93,38 @@ if (isset($_GET['g'])) {
     </section>
 
     <section>
-        <h3>Parties jouées : <?php echo $nb_gameplay->C; ?></h3>
+        <h3>Nombre de parties et scores moyens</h3>
         <?php
-        if ($display_players_info) {
-            echo '<ul>';
-            foreach ($players_info as $player_info) {
-                echo '<li class="cleanli">';
-                echo $player_info->firstname . ' ' . $player_info->lastname . ' : <b>' . $player_info->nb . '</b> parties, score moyen = ' . $player_info->avgs;
-                echo '</li>';
-            }
-            echo '</ul>';
+        // joueurs
+        if ($boardgame_plays['NB']) {
+            $players_average_scores = $boardgame_plays_manager->getAverageScorePerPlayerByBoardgame($boardgame->getId());
         }
+        // display
+        echo '<ul>';
+        foreach ($players_average_scores as $player_average_score) {
+            echo '<li class="cleanli">';
+            echo $player_average_score['firstname'] . ' ' . $player_average_score['lastname'] . ' : <b>' . $player_average_score['nb'] . '</b> parties, score moyen = ' . $player_average_score['avgs'];
+            echo '</li>';
+        }
+        echo '</ul>';
         ?>
     </section>
 
     <footer>
-        <h3>Toutes les parties de <?php echo $game_info->gamename; ?></h3>
+        <h3>Toutes les parties de <?php echo $boardgame->getName(); ?></h3>
         <?php
-        if ($nb_gameplay) {
-            $gameplays_list = getGameplaysListFromGameid($game_id);
+        if ($boardgame_plays['NB']) {
+            $gameboard_plays_list = $boardgame_plays_manager->getBoardgamePlaysListByBoardgame($boardgame->getId());
             echo '<ul>';
-            foreach ($gameplays_list as $gameplay) {
+            foreach ($gameboard_plays_list as $gameboard_play) {
                 echo '<li class="cleanli">';
-                echo 'Partie n°' . $gameplay->id . ', le ' . SqlToTime($gameplay->date) . ' : ';
+                echo 'Partie n°' . $gameboard_play['id'] . ', le ' . $gameboard_play['date'] . ' : ';
                 // recherche les joueurs et scores
-                $gameplayLines = getPlayersFromGameplayId($gameplay->id);
+                $boardgame_play_lines = $boardgame_plays_manager->getPlayersFromBoardgamePlayId($gameboard_play['id']);
                 echo '<ul>';
-                foreach ($gameplayLines as $line) {
+                foreach ($boardgame_play_lines as $boardgame_play_line) {
                     echo '<li class="cleanli">';
-                    echo $line->firstname . ' ' . $line->lastname . ' : ' . $line->score;
+                    echo $boardgame_play_line['firstname'] . ' ' . $boardgame_play_line['lastname'] . ' : ' . $boardgame_play_line['score'];
                     echo '</li>';
                 }
                 echo '</ul>';
@@ -135,6 +142,7 @@ if (isset($_GET['g'])) {
 </aside>
 
 <?php
+
 include_once INC . 'footer.php';
 
 
