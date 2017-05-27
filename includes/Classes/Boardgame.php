@@ -47,6 +47,24 @@ class boardgame
 
     }
 
+
+    /*
+     * MAGICs
+     */
+    public function __isset($nom)
+    {
+        return isset($this->$nom);
+    }
+
+    public function __unset($nom)
+    {
+        if (isset($this->$nom)) {
+            unset($this->$nom);
+        }
+    }
+
+
+
     /*
      * Ci-dessous : SETTERS & GETTERS
      */

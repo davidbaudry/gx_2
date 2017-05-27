@@ -5,12 +5,28 @@
     include_once INC . 'header.php';
     
     $display_players_info = false;
-    
-    if(isset($_GET['g']))
+
+    if (isset($_GET['p']))
     {
-        $player_id = (int)$_GET['g'];
+        $player_id = (int)$_GET['p'];
         if ($player_id)
         {
+
+            var_dump($player_id);
+
+            // L'objet instancié de la classe manager collecte les données
+            $people_manager = new PeopleManager();
+
+            // L'objet instancié de la classe boardgame est hydraté avec les données transmises par le manager
+            $player = new Player($people_manager->getPlayer($player_id)); // is an array
+
+            var_dump($player);
+            $player->methode(123, 'test');
+
+
+            die('4567');
+
+
             // infos sur le jeu
             $player_info = getPlayerFromId($player_id);
             

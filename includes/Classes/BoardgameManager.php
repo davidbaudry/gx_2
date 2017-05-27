@@ -2,7 +2,7 @@
 
 /*
  * Class Manager pour boardgame
- * Responsabilité : Gérer lea connexions et les requêtes BDD pour tout ce qui concerne les boardgames
+ * Responsabilité : Gérer les connexions et les requêtes BDD pour tout ce qui concerne les boardgames
  */
 
 class boardgameManager

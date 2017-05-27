@@ -13,10 +13,10 @@ if (isset($_GET['g'])) {
         // L'objet instancié de la classe manager collecte les données
         $boardgame_manager = new BoardgameManager();
 
-        // L'objet instancié de la classe boardgame est hydraté avec les données ransmises par le manager
+        // L'objet instancié de la classe boardgame est hydraté avec les données transmises par le manager
         $boardgame = new Boardgame($boardgame_manager->get($boardgame_id));
 
-
+        
         // todo : Virer cet ancien code - tout passer en OO
         /*
 
