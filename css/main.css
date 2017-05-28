@@ -35,12 +35,13 @@ video {
 }
 
 .cleanli {
-    list-style-type: none;
     background-color: whitesmoke;
-/ / border: 1 px solid lightgray;
-    margin: 2px;
-    padding: 1px;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    list-style-type: none;
+    margin: 2px;
+    min-height: 42px;
+    padding: 1px;
 }
 
 fieldset {
@@ -68,6 +69,7 @@ textarea {
 
 body {
     font: 16px/26px Helvetica, Helvetica Neue, Arial;
+    /*background-image: url("../static/bg3.jpg");*/
 }
 
 .wrapper {
@@ -80,8 +82,6 @@ body {
    =================== */
 
 .header-container {
-/ / border-bottom: 20 px solid #e44d26;
-/ / border-bottom: 20 px solid #1570cd;
     border-bottom: 20px solid #1c242c;
 }
 

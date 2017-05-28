@@ -6,6 +6,8 @@
 
 class boardgame implements BoardgameInterface
 {
+    use frenchDates;
+    
     // constantes de classe
     const NO_AUTHOR = 'Pas d\'auteur';
 
@@ -44,7 +46,6 @@ class boardgame implements BoardgameInterface
             $this->setName('Unknown');
             return false;
         }
-
     }
 
 

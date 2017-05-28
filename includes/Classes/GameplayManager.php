@@ -7,6 +7,8 @@
 class GameplayManager
 {
 
+    use frenchDates;
+
     private $_db; /// instance de PDO
 
     public function __construct()
@@ -86,14 +88,20 @@ class GameplayManager
     {
         $pdo_ressource = new Database();
         $db = $pdo_ressource->getCx();
-        $query = $db->prepare('
+        /*$query = $db->prepare('
             SELECT gp.id, DATE_FORMAT(gp.date, \'%d/%m/%Y\') AS date
+            FROM gameplay gp 
+            WHERE gp.game_id = :id
+            ORDER BY gp.date ASC');*/
+        $query = $db->prepare('
+            SELECT gp.id, gp.date
             FROM gameplay gp 
             WHERE gp.game_id = :id
             ORDER BY gp.date ASC');
         $query->execute(array('id' => $boardgame_id));
         $played = array();
         while ($plays = $query->fetch()) {
+            $plays['date'] = $this->frenchDate($plays['date']);
             $played[] = $plays;
         }
         return $played;

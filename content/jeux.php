@@ -4,7 +4,7 @@
 include_once '../includes/init.php';
 include_once INC . 'header.php';
 ?>
-<a name="top"/>
+<a name="top"></a>
 <article>
     <?php
     /* PREPARATION DE LA LISTE DE JEUX */
