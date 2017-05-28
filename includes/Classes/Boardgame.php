@@ -4,7 +4,7 @@
  * Boardgame class
  */
 
-class boardgame
+class boardgame implements BoardgameInterface
 {
     // constantes de classe
     const NO_AUTHOR = 'Pas d\'auteur';
@@ -30,7 +30,7 @@ class boardgame
      * La fonction d'hydratation va hydrater les attributs via les setters (contrôle) avec les
      * données venant de la DBB (ou autre)
      */
-    protected function hydrate(array $boardgame_data)
+    public function hydrate(array $boardgame_data)
     {
         if ($boardgame_data) {
             foreach ($boardgame_data as $key => $value) {
@@ -68,7 +68,7 @@ class boardgame
         echo 'La méthode <strong>', $nom, '</strong> a été appelée alors qu\'elle n\'existe pas ! Ses arguments étaient les suivants : <strong>', implode($arguments,
             '</strong>, <strong>'), '</strong><br />';
     }
-    
+
     public function __get($name)
     {
         echo "Récupération de '$name'\n";

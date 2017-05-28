@@ -8,7 +8,7 @@
  * Abstract class : Il faudra instancier des auteurs ou des joueurs mais pas directement des peoples
  *
  */
-abstract class People
+abstract class People implements PeopleInterface
 {
 
     private $_id;
@@ -24,7 +24,7 @@ abstract class People
      * La fonction d'hydratation va alimenter les attributs via les setters (donc contrôle) avec les
      * données venant de la DBB (ou autre)
      */
-    protected function hydrate(array $people_data)
+    public function hydrate(array $people_data)
     {
         if ($people_data) {
             foreach ($people_data as $key => $value) {

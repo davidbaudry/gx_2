@@ -7,7 +7,7 @@
  *
  * Final : cette classe n'aura pas de classe fille
  */
-final class Player extends People
+final class Player extends People implements PeopleInterface
 {
 
     private $_is_starred;

@@ -4,7 +4,7 @@
  * Classe ayant pour responsabilité de traiter avec la BDD tout ce qui a trait aux parties jouées
  */
 
-class BoardgamePlaysManager
+class GameplayManager
 {
 
     private $_db; /// instance de PDO

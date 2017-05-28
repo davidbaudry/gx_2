@@ -17,7 +17,7 @@ if (isset($_GET['g'])) {
         $boardgame = new Boardgame($boardgame_manager->get($boardgame_id));
 
         // On a également besoin d'un manager pour le sparties
-        $boardgame_plays_manager = new BoardgamePlaysManager();
+        $boardgame_plays_manager = new GameplayManager();
 
         /* test d'utilisation de méthodes magiques
         $boardgame->plop('123');
@@ -32,10 +32,10 @@ if (isset($_GET['g'])) {
 ?>
 <article>
     <header>
-        <h1>Fiche <span class="invert_bw"><?php echo $boardgame->getId(); ?></span>
-            : <?php echo $boardgame->getName(); ?></h1>
+        <h1><?php echo $boardgame->getName(); ?></h1>
     </header>
     <section>
+        <h2>Fiche <span class="invert_bw"><?php echo $boardgame->getId(); ?></span></h2>
         <ul>
             <li class="cleanli">
                 Auteur : <a href="#"><?php echo $boardgame->getAuthor(); ?></a>
