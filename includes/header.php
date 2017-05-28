@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<?php echo CSSROOT; ?>normalize.css">
     <link rel="stylesheet" href="<?php echo CSSROOT; ?>main.css">
-    <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <script src="<?php echo JSROOT; ?>js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
 <body>
 <div class="header-container">
@@ -16,7 +16,6 @@
             <ul>
                 <li><a href="<?php echo LINK_BASE_URL; ?>content/gameplay.php">Les parties</a></li>
                 <li><a href="<?php echo LINK_BASE_URL; ?>content/jeux.php">Les jeux</a></li>
-
                 <li><a href="<?php echo LINK_BASE_URL; ?>content/joueurs.php">Les joueurs</a></li>
             </ul>
         </nav>

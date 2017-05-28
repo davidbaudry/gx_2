@@ -23,7 +23,7 @@ if(isset($_POST['submit']) && ($_POST['submit'] == 'insert'))
 
 <article>
     <header>
-        <h1>Formulaire Jeux (CRUD)</h1>
+        <h1>Formulaire Jeux [CRUD]</h1>
     </header>
 
     <section>
