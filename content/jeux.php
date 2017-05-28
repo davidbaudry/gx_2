@@ -57,9 +57,9 @@ include_once INC . 'header.php';
                     echo ' (e)';
                 }
                 echo ' - ';
-                echo '<a href="' . LINK_BASE_URL . 'content/fiche-jeu.php?g=' . $boardgame_current['id'] . '">Fiche</a>';
+                echo '<a href="' . LINK_BASE_URL . 'content/fiche-jeu.php?boardgame=' . $boardgame_current['id'] . '">Fiche</a>';
                 echo ' - ';
-                echo '<a href="' . LINK_BASE_URL . 'content/form-jeu.php?g=' . $boardgame_current['id'] . '">Form</a>';
+                echo '<a href="' . LINK_BASE_URL . 'content/form-jeu.php?boardgame=' . $boardgame_current['id'] . '">Form</a>';
 
                 // todo: explorer ce bout : echo ' - <span class="infotxt">' . $boardgame_current['C'] . ' parties jouées</span>';
                 echo '</li>';

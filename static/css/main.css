@@ -36,11 +36,11 @@ video {
 
 .cleanli {
     background-color: whitesmoke;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     border-radius: 5px;
     list-style-type: none;
     margin: 2px;
-    min-height: 42px;
+    /*min-height: 42px;*/
     padding: 1px;
 }
 
