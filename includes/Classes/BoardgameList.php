@@ -8,7 +8,7 @@
  * Cette classe va permettre de construire et de parcourir des liste s de jeux,
  * en s'appuyant sur des interfaces prédéfinies
  */
-class BoardgameList implements SeekableIterator
+class BoardgameList implements SeekableIterator, Countable
 {
 
     private $_boardgame_list;
@@ -21,7 +21,18 @@ class BoardgameList implements SeekableIterator
 
     public function hydrate(array $boardgame_list)
     {
+        $this->_position = 0;
+        foreach ($boardgame_list as $boardgame) {
+            $this->_boardgame_list[] = self::setBoardgameIteration($boardgame);
+        }
+    }
 
+    /*
+     * Cette méthode va contrôler les données avant hydratation
+     */
+    private function setBoardgameIteration($boardgame)
+    {
+        return $boardgame;
     }
 
     /**
@@ -76,6 +87,17 @@ class BoardgameList implements SeekableIterator
             trigger_error('La position spécifiée n\'est pas valide', E_USER_WARNING);
             $this->_position = $old_position;
         }
+    }
+
+
+    /* MÉTHODE DE L'INTERFACE Countable */
+
+    /**
+     * Retourne le nombre d'entrées de notre tableau.
+     */
+    public function count()
+    {
+        return count($this->_boardgame_list);
     }
 
 

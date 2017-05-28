@@ -34,19 +34,62 @@ if(isset($_POST['submit']) && ($_POST['submit'] == 'insert'))
         <?php echo '<a href="' . LINK_BASE_URL . 'content/fiche-famille.php?famille=0">Aventuriers du rail</a>'; ?>
     </section>
 
+    <?php
+    /* PREPARATION DE LA LISTE DE JEUX */
+
+    // on va rechercher la liste des jeux présents en database
+    // - en utilisant le manager
+    $boardgame_list_manager = new BoardgameListManager();
+    // - puis la méthode get de ce manager
+    $boardgame_list_array = $boardgame_list_manager->getList();
+    // on instancie maintenant la classe qui va manipuler ce tableau
+    $boardgame_list = new BoardgameList($boardgame_list_array);
+    $total_number_of_boardgames = $boardgame_list->count();
+
+    ?>
 
     <section>
-        <h2>Liste des jeux</h2>
+        <h2>Liste des jeux (<?php echo $total_number_of_boardgames; ?> trouvé(s))</h2>
+        <ul>
+
+
+            <?php
+            // parcours de la liste
+            for ($iterator = 1; $iterator <= $total_number_of_boardgames; $iterator++) {
+
+                $boardgame_current = $boardgame_list->current();
+
+                echo '<li class="cleanli">';
+                //echo '[';
+                //echo $game->id;
+                //echo ']';
+                //echo ' ';
+                echo '<a href="' . LINK_BASE_URL . 'content/fiche-jeu.php?g=' . $boardgame_current['id'] . '">' . $boardgame_current['gamename'] . '</a>';
+                echo ' ';
+                echo '(';
+                echo $boardgame_current['firstname'] . ' ' . $boardgame_current['lastname'];
+                echo ')';
+                echo ' - ';
+                echo $boardgame_current['editorname'];
+                if ($boardgame_current['is_extension']) {
+                    echo ' (e)';
+                }
+                //echo ' - <span class="infotxt">' . $boardgame_current['C'] . ' parties jouées</span>';
+                echo '</li>';
+
+
+                //print_r($boardgame_list->current());
+                //echo '<br>';
+                $boardgame_list->next();
+
+
+                /*
+                 * Array ( [id] => 12 [0] => 12 [gamename] => Brains - Jardin japonais [1] => Brains - Jardin japonais [is_extension] => 0 [2] => 0 [firstname] => Uwe [3] => Uwe [lastname] => Rosenberg [4] => Rosenberg [editorname] => Matagot [5] => Matagot )
+                 */
+            }
+            ?>
+        </ul>
         <?php
-        // on va rechercher la liste des jeux présents en database
-        // - en utilisant le manager
-        $boardgame_list_manager = new BoardgameListManager();
-        // - puis la méthode get de ce manager
-        $boardgame_list = $boardgame_list_manager->getList();
-
-        print_r($boardgame_list);
-
-
         die ('old stuff cursor <>');
 
         $liste_games = array();
@@ -61,23 +104,7 @@ if(isset($_POST['submit']) && ($_POST['submit'] == 'insert'))
             }
             // compte les parties de ce jeu
             $nb_gameplay = getNbPlayedGameplays($game->id);
-            echo '<li class="cleanli">';
-            //echo '[';
-            //echo $game->id;
-            //echo ']';
-            //echo ' ';
-            echo '<a href="' . LINK_BASE_URL . 'content/fiche-jeu.php?g=' . $game->id . '">' . $game->gamename . '</a>';
-            echo ' ';
-            echo '(';
-            echo $game->firstname . ' ' . $game->lastname;
-            echo ')';
-            echo ' - ';
-            echo $game->editorname;
-            if ($game->is_extension) {
-                echo ' (e)';
-            }
-            echo ' - <span class="infotxt">' . $nb_gameplay->C . ' parties jouées</span>';
-            echo '</li>';
+
         }
         echo '</ul>';
         ?>
