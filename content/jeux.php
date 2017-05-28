@@ -3,37 +3,9 @@
 <?php
 include_once '../includes/init.php';
 include_once INC . 'header.php';
-
-//$authorList =  authorList();
-//$editorList =  editorList();
-
-/*
-//analyse POST
-if(isset($_POST['submit']) && ($_POST['submit'] == 'insert'))
-{
-    //var_dump($_POST);
-    if($_POST['name']){
-        insertGame($_POST);
-    }
-}
-*/
-
-
 ?>
+<a name="top"/>
 <article>
-    <header>
-        <h1>Les jeux</h1>
-    </header>
-    <?php
-    foreach (range('A', 'Z') as $lettre) {
-        echo '<a href="#' . $lettre . '">' . $lettre . '</a> ';
-    }
-    ?>
-    <section>
-        <h2>Familles</h2>
-        <?php echo '<a href="' . LINK_BASE_URL . 'content/fiche-famille.php?famille=0">Aventuriers du rail</a>'; ?>
-    </section>
-
     <?php
     /* PREPARATION DE LA LISTE DE JEUX */
 
@@ -42,30 +14,40 @@ if(isset($_POST['submit']) && ($_POST['submit'] == 'insert'))
     $boardgame_list_manager = new BoardgameListManager();
     // - puis la méthode get de ce manager
     $boardgame_list_array = $boardgame_list_manager->getList();
-    // on instancie maintenant la classe qui va manipuler ce tableau
     $boardgame_list = new BoardgameList($boardgame_list_array);
     $total_number_of_boardgames = $boardgame_list->count();
-
     ?>
+    <header>
+        <h1>Liste des <?php echo $total_number_of_boardgames; ?> jeux</h1>
+    </header>
 
     <section>
-        <h2>Liste des jeux (<?php echo $total_number_of_boardgames; ?> trouvé(s))</h2>
+        Aller à : <?php
+        foreach (range('A', 'Z') as $lettre) {
+            echo '<a href="#' . $lettre . '">' . $lettre . '</a> ';
+        }
+        ?>
         <ul>
-
-
             <?php
+            // préparation d'une rupture lorsque l'on change d'initiale
+            $initiale = null;
             // parcours de la liste
-            for ($iterator = 1; $iterator <= $total_number_of_boardgames; $iterator++) {
+            while ($boardgame_list->valid()) {
 
                 $boardgame_current = $boardgame_list->current();
 
+                if ($initiale != substr($boardgame_current['gamename'], 0, 1)) {
+                    $initiale = substr($boardgame_current['gamename'], 0, 1);
+                    echo '<h3><a id="' . $initiale . '">' . $initiale . '</a> - <a href="#top">&uarr;</a></a></h3>';
+                }
+
                 echo '<li class="cleanli">';
-                //echo '[';
-                //echo $game->id;
-                //echo ']';
-                //echo ' ';
-                echo '<a href="' . LINK_BASE_URL . 'content/fiche-jeu.php?g=' . $boardgame_current['id'] . '">' . $boardgame_current['gamename'] . '</a>';
-                echo ' ';
+                echo '<span class="invert_bw"> ' . str_pad($boardgame_current['id'], 3, "0",
+                        STR_PAD_LEFT) . '</span>';
+                echo '  - ';
+                //echo '<a href="' . LINK_BASE_URL . 'content/fiche-jeu.php?g=' . $boardgame_current['id'] . '">' . $boardgame_current['gamename'] . '</a>';
+                echo '<strong>' . $boardgame_current['gamename'] . '</strong>';
+                echo '  - ';
                 echo '(';
                 echo $boardgame_current['firstname'] . ' ' . $boardgame_current['lastname'];
                 echo ')';
@@ -74,100 +56,31 @@ if(isset($_POST['submit']) && ($_POST['submit'] == 'insert'))
                 if ($boardgame_current['is_extension']) {
                     echo ' (e)';
                 }
-                //echo ' - <span class="infotxt">' . $boardgame_current['C'] . ' parties jouées</span>';
+                echo ' - ';
+                echo '<a href="' . LINK_BASE_URL . 'content/fiche-jeu.php?g=' . $boardgame_current['id'] . '">Fiche</a>';
+                echo ' - ';
+                echo '<a href="' . LINK_BASE_URL . 'content/form-jeu.php?g=' . $boardgame_current['id'] . '">Form</a>';
+
+                // todo: explorer ce bout : echo ' - <span class="infotxt">' . $boardgame_current['C'] . ' parties jouées</span>';
                 echo '</li>';
 
-
-                //print_r($boardgame_list->current());
-                //echo '<br>';
                 $boardgame_list->next();
 
-
-                /*
-                 * Array ( [id] => 12 [0] => 12 [gamename] => Brains - Jardin japonais [1] => Brains - Jardin japonais [is_extension] => 0 [2] => 0 [firstname] => Uwe [3] => Uwe [lastname] => Rosenberg [4] => Rosenberg [editorname] => Matagot [5] => Matagot )
-                 */
             }
             ?>
         </ul>
-        <?php
-        die ('old stuff cursor <>');
-
-        $liste_games = array();
-        $liste_games = gamesList();
-        // conserve l'initiale pour la rupture
-        $initiale = null;
-        echo '<ul>';
-        foreach ($liste_games AS $game) {
-            if ($initiale != substr($game->gamename, 0, 1)) {
-                $initiale = substr($game->gamename, 0, 1);
-                echo '<h3><a id="' . $initiale . '">' . $initiale . '</a></h3>';
-            }
-            // compte les parties de ce jeu
-            $nb_gameplay = getNbPlayedGameplays($game->id);
-
-        }
-        echo '</ul>';
-        ?>
-
-    </section>
-    <section>
-        <form action="" method="post">
-            <fieldset class="">
-                <label for="foo">Nom : </label>
-                <br/>
-                <input name="name" size="25" type="text" placeholder="Nom du jeu">
-                <br/>
-                <label for="foo">Auteur : </label>
-                <br/>
-                <select name="author_id">
-                    <?php
-                    foreach ($authorList as $author) {
-                        ?>
-                        <option
-                            value="<?php echo $author->id; ?>"><?php echo $author->firstname . ' ' . $author->lastname; ?>
-                        </option>
-                        <?php
-                    }
-                    ?>
-                </select>
-                <br/>
-                <label for="foo">Editeur : </label>
-                <br/>
-                <select name="editor_id">
-                    <?php
-                    foreach ($editorList as $editor) {
-                        ?>
-                        <option
-                            value="<?php echo $editor->id; ?>"><?php echo $editor->name; ?></option>
-                        <?php
-                    }
-                    ?>
-                </select>
-                <br/>
-                <label for="foo">Extension ?</label><br/>
-                <input type="radio" name="is_extension" value="1">Oui
-                <input type="radio" name="is_extension" value="0" checked>Non
-                <br/>
-                <label for="foo">Collaboratif ?</label><br/>
-                <input type="radio" name="is_collaborative" value="1">Oui
-                <input type="radio" name="is_collaborative" value="0" checked>Non
-                <br/>
-                <label for="foo">Scores inversés ?</label><br/>
-                <input type="radio" name="has_invert_score" value="1">Oui
-                <input type="radio" name="has_invert_score" value="0" checked>Non
-                <br/>
-                <input name="description" size="25" type="hidden" value="...">
-                <hr class="hrclear"/>
-                <button class="button1" type="submit" name="submit" value="insert">Ajouter un jeu
-                </button>
-            </fieldset>
-        </form>
     </section>
 </article>
 
 <aside>
-    <h3>aside</h3>
-    <p>...</p>
+    <section>
+        <h2>Familles</h2>
+        <?php echo '<a href="' . LINK_BASE_URL . 'content/fiche-famille.php?famille=0">Aventuriers du rail</a>'; ?>
+    </section>
+    <section>
+        <h2>Create</h2>
+        <?php echo '<a href="' . LINK_BASE_URL . 'content/form-jeu.php?create">Créer nouvelle fiche de jeu</a>'; ?>
+    </section>
 </aside>
 
 <?php

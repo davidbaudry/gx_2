@@ -23,7 +23,11 @@ class BoardgameList implements SeekableIterator, Countable
     {
         $this->_position = 0;
         foreach ($boardgame_list as $boardgame) {
-            $this->_boardgame_list[] = self::setBoardgameIteration($boardgame);
+            try {
+                $this->_boardgame_list[] = self::setBoardgameIteration($boardgame);
+            } catch (Exception $e) {
+                echo 'Exception rencontrée. Message d\'erreur : ', $e->getMessage() . '<br>';
+            }
         }
     }
 
@@ -32,6 +36,11 @@ class BoardgameList implements SeekableIterator, Countable
      */
     private function setBoardgameIteration($boardgame)
     {
+        if (!is_array($boardgame)) {
+            throw new ScorerException ('Cette entrée n\'est pas un tableau !');
+        }
+        // todo : d'autres contrôles ici
+
         return $boardgame;
     }
 
