@@ -13,5 +13,4 @@ trait frenchDates
         $fr_date = $fr_date[2] . '/' . $fr_date[1] . '/' . $fr_date[0];
         return $fr_date;
     }
-
 }

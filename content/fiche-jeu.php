@@ -19,12 +19,6 @@ if ((isset($_GET['boardgame'])) and ((int)$_GET['boardgame'] > 0)) {
         // On a également besoin d'un manager pour le sparties
         $boardgame_plays_manager = new GameplayManager();
 
-        /* test d'utilisation de méthodes magiques
-        $boardgame->plop('123');
-        if (isset($boardgame->_name)) {
-            echo 'Existe';
-        }
-        */
         ?>
         <article>
             <header>
@@ -37,7 +31,7 @@ if ((isset($_GET['boardgame'])) and ((int)$_GET['boardgame'] > 0)) {
                         Auteur : <a href="#"><?php echo $boardgame->getAuthor(); ?></a>
                     </li>
                     <li class="cleanli">
-                        Auteur 2 : <a href="#"><?php echo $boardgame->getAuthor_second(); ?></a>
+                        Auteur 2 : <a href="#"><?php echo $boardgame->getAuthorSecondId(); ?></a>
                     </li>
                     <li class="cleanli">
                         Editeur : <a href="#"><?php echo $boardgame->getEditor(); ?></a>

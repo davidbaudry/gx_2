@@ -164,15 +164,25 @@ class boardgame implements BoardgameInterface
         return $this->_name;
     }
 
+    public function getAuthorId()
+    {
+        return $this->_author_id;
+    }
+
     public function getAuthor()
     {
         // ici on va faire appel à la classe authors afin de retourner les infos pratiques
         return $this->_author_id;
     }
 
-    public function getAuthor_second()
+    public function getAuthorSecondId()
     {
         return $this->_author_second_id;
+    }
+
+    public function getEditorId()
+    {
+        return $this->_editor_id;
     }
 
     public function getEditor()

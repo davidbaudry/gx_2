@@ -6,60 +6,47 @@ include_once INC . 'header.php';
 
 $form_mode = null;
 
-// Retour de formulaire ?
+// Form case ?
 // todo : simplifier cette partie
-if ((isset($_POST)) and (in_array($_POST['submit'], array('update', 'create')))) {
-    switch ($_POST['submit']) {
-        case 'Create' :
 
-            // contrôles et insertion
+// update case : id passed by url (GET) or form return (POST)
+if (isset($_POST['submit']) && ($_POST['submit'] === 'update')) {
+    $boardgame_id = (int)$_POST['boardgame_id'];
+    echo '***test';
+    var_dump($_POST);
 
-            // si ok on passe en mode update
-            $form_mode = 'update';
-
-            break;
-        case 'Update' :
-
-            // contrôles et mise à jour
-
-            // on reste en mode update
-            $form_mode = 'update';
-
-            break;
-        default :
-
-    }
 } else {
-    // on affiche le formulaire en mode create ou en mode update
-
-    if ((isset($_GET['boardgame'])) and ((int)$_GET['boardgame'] > 0)) {
-
+    if ((int)$_GET['boardgame'] > 0) {
         $boardgame_id = (int)$_GET['boardgame'];
-        if ($boardgame_id) {
-            $form_mode = 'update';
-            $form_h1_title = 'Formulaire Jeux [crUd]';
-        }
     }
 }
 
-/* PREPARATION DE LA LISTE DES AUTEURS */
+if ($boardgame_id) {
+    $form_mode = 'update';
+    $form_h1_title = 'Formulaire Jeux [update]';
+    // retrieve object boardgame
+    // todo : cacher ces appels au manager  (traits ? autre ?)
+    $boardgame_manager = new boardgameManager();
+    $boardgame_data = $boardgame_manager->get($boardgame_id);
+    $boardgame = new boardgame($boardgame_data);
+    var_dump($boardgame);
+}
 
-// on va rechercher la liste des auteurs présents en database
-// - en utilisant le manager
+
+// Authors list :
+// Seek authors in database
+// - using manager class
 $people_manager = new PeopleManager();
-// - puis la méthode get de ce manager
 $author_list_array = $people_manager->getAuthorList();
-$author_list = new AuthorList($author_list_array);
+// array of authors is used to build author list iterator object
+$author_list = new EditorList($author_list_array);
 $total_number_of_authors = $author_list->count();
 
-while ($author_list->valid()) {
-    print_r($author_list->current());
-    $author_list->next();
-}
-
-
-//$editorList =  editorList();
-
+// Editor list
+$editor_manager = new EditorManager();
+$editor_list_array = $editor_manager->getEditorList();
+$editor_list = new EditorList($editor_list_array);
+$total_number_of_editors = $editor_list->count();
 ?>
 
 <article>
@@ -70,37 +57,59 @@ while ($author_list->valid()) {
     <?php
     if ($form_mode == 'update') {
         ?>
-
         <section>
-            <form action="" method="post">
+            <form action="<?php echo LINK_BASE_URL ?>content/form-jeu.php" method="post">
                 <fieldset class="">
                     <label for="foo">Nom : </label>
                     <br/>
-                    <input name="name" size="25" type="text" placeholder="Nom du jeu">
+                    <input name="name" size="25" type="text" placeholder="Nom du jeu"
+                           value="<?php echo $boardgame->getName(); ?>">
                     <br/>
-                    <label for="foo">Auteur : </label>
+                    <label for="foo">Auteur(s) : (<?php echo $total_number_of_authors; ?>)
+                        possibles</label>
                     <br/>
                     <select name="author_id">
                         <?php
-                        foreach ($authorList as $author) {
+                        // Browse the author list using SeekableIterator methods
+                        while ($author_list->valid()) {
+                            $author = $author_list->current();
                             ?>
                             <option
-                                value="<?php echo $author->id; ?>"><?php echo $author->firstname . ' ' . $author->lastname; ?>
+                                value="<?php echo $author['id']; ?>" <?php echo($author['id'] == $boardgame->getAuthorId() ? 'selected' : ''); ?>><?php echo $author['lastname'] . ' ' . $author['firstname']; ?>
                             </option>
                             <?php
+                            $author_list->next();
+                        }
+                        ?>
+                    </select>
+                    <select name="author_second_id">
+                        <?php
+                        $author_list->rewind();
+                        while ($author_list->valid()) {
+                            $author = $author_list->current();
+                            ?>
+                            <option
+                                value="<?php echo $author['id']; ?>" <?php echo($author['id'] == $boardgame->getAuthorSecondId() ? 'selected' : ''); ?>><?php echo $author['lastname'] . ' ' . $author['firstname']; ?>
+                            </option>
+                            <?php
+                            $author_list->next();
                         }
                         ?>
                     </select>
                     <br/>
-                    <label for="foo">Editeur : </label>
+                    <label for="foo">Editeur : (<?php echo $total_number_of_editors; ?>)
+                        possibles</label>
                     <br/>
                     <select name="editor_id">
                         <?php
-                        foreach ($editorList as $editor) {
+                        // Browse the author list using SeekableIterator methods
+                        while ($editor_list->valid()) {
+                            $editor = $editor_list->current();
                             ?>
                             <option
-                                value="<?php echo $editor->id; ?>"><?php echo $editor->name; ?></option>
+                                value="<?php echo $editor['id']; ?>" <?php echo($editor['id'] == $boardgame->getEditorId() ? 'selected' : ''); ?>><?php echo $editor['name']; ?></option>
                             <?php
+                            $editor_list->next();
                         }
                         ?>
                     </select>
@@ -119,8 +128,9 @@ while ($author_list->valid()) {
                     <br/>
                     <input name="description" size="25" type="hidden" value="...">
                     <hr class="hrclear"/>
-                    <button class="button1" type="submit" name="submit" value="insert">Ajouter un
-                        jeu
+                    <input type="hidden" name="boardgame_id"
+                           value="<?php echo $boardgame->getId(); ?>">
+                    <button class="button1" type="submit" name="submit" value="update">Mettre à jour
                     </button>
                 </fieldset>
             </form>

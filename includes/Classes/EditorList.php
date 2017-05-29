@@ -2,49 +2,58 @@
 
 /**
  * Created by David
- * Date: 28/05/2017
- * Time: 10:31
+ * Date: 29/05/2017
+ * Time: 21:31
  * --
- * Cette classe va permettre de construire et de parcourir des listes d'auteurs,
- * en s'appuyant sur des interfaces prédéfinies
+ * Build and browse Editors List
  */
-class AuthorList implements SeekableIterator, Countable
+class EditorList implements SeekableIterator, Countable
 {
 
-    private $_author_list;
-    private $_position;
+    /**
+     * @var
+     */
+    private
+        $_editor_list,
+        $_position;
 
-    public function __construct(array $_author_list)
+    /**
+     * EditorList constructor.
+     * @param array $_editor_list
+     */
+    public function __construct(array $_editor_list)
     {
-        self::hydrate($_author_list);
+        self::hydrate($_editor_list);
     }
 
-    public function hydrate(array $author_list)
+    /**
+     * @param array $editor_list
+     */
+    public function hydrate(array $editor_list)
     {
         $this->_position = 0;
-        foreach ($author_list as $author) {
+        foreach ($editor_list as $editor) {
             try {
-                $this->_author_list[] = self::setAuthorIteration($author);
+                $this->_editor_list[] = self::setEditorIteration($editor);
             } catch (Exception $e) {
                 echo 'Exception rencontrée. Message d\'erreur : ', $e->getMessage() . '<br>';
             }
         }
     }
 
-
     /**
-     * @param $author
+     * @param $editor
      * @return mixed
      * @throws ScorerException
      */
-    private function setAuthorIteration($author)
+    private function setEditorIteration($editor)
     {
-        if (!is_array($author)) {
+        if (!is_array($editor)) {
             throw new ScorerException ('Cette entrée n\'est pas un tableau !');
         }
         // todo : d'autres contrôles ici
 
-        return $author;
+        return $editor;
     }
 
     /**
@@ -52,11 +61,11 @@ class AuthorList implements SeekableIterator, Countable
      */
     public function current()
     {
-        return $this->_author_list[$this->_position];
+        return $this->_editor_list[$this->_position];
     }
 
     /**
-     * Retourne la clé actuelle (c'est la même que la position dans notre cas).
+     * Retourne la clé actuelle.
      */
     public function key()
     {
@@ -84,7 +93,7 @@ class AuthorList implements SeekableIterator, Countable
      */
     public function valid()
     {
-        return isset($this->_author_list[$this->_position]);
+        return isset($this->_editor_list[$this->_position]);
     }
 
     /**
@@ -109,7 +118,7 @@ class AuthorList implements SeekableIterator, Countable
      */
     public function count()
     {
-        return count($this->_author_list);
+        return count($this->_editor_list);
     }
 
 
