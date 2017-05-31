@@ -15,9 +15,9 @@ $form_h1_title = 'todo';
 if (isset($_POST['submit']) && ($_POST['submit'] === 'update')) {
     $boardgame_id = (int)$_POST['id'];
     // protection du post
-    /*foreach ($_POST as $key => $value) {
+    foreach ($_POST as $key => $value) {
         $_POST[$key] = htmlspecialchars($value);
-    }*/
+    }
     // Call update boardgame method
     $boardgame = new boardgame($_POST);
     $boardgame_manager = new boardgameManager();
