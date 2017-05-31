@@ -167,12 +167,24 @@ class boardgame implements BoardgameInterface
     public function getAuthor()
     {
         // ici on va faire appel à la classe authors afin de retourner les infos pratiques
-        return $this->_author_id;
+        $author_manager = new PeopleManager();
+        $author_data = $author_manager->getAuthor($this->_author_id);
+        $author = new Author($author_data);
+        return $author->getFullName();
     }
 
     public function getAuthorSecondId()
     {
         return $this->_author_second_id;
+    }
+
+    public function getAuthorSecond()
+    {
+        // ici on va faire appel à la classe authors afin de retourner les infos pratiques
+        $author_manager = new PeopleManager();
+        $author_data = $author_manager->getAuthor($this->_author_second_id);
+        $author = new Author($author_data);
+        return $author->getFullName();
     }
 
     public function getEditorId()
@@ -182,7 +194,11 @@ class boardgame implements BoardgameInterface
 
     public function getEditor()
     {
-        return $this->_editor_id;
+        $editor_manager = new EditorManager();
+        $editor_data = $editor_manager->getEditor($this->_editor_id);
+        $editor = new Editor($editor_data);
+        return $editor->getName();
+
     }
 
     public function getDescription()

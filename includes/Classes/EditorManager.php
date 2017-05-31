@@ -19,6 +19,29 @@ class EditorManager
     /*
      * GET + CRUD
      */
+
+    public function getEditor($editor_id)
+    {
+        // préparation de la requête
+        $query = $this->_db->prepare(
+            'SELECT 
+                `id`, 
+                `name`
+            FROM `editors` 
+            WHERE `id` = :id'
+        );
+        // Passage de la requête avec les paramètres + test de la validité de la réponse
+        if ($query->execute(array('id' => $editor_id))) {
+            $editor_data = $query->fetch();
+            return ($editor_data);
+        } else {
+            trigger_error('Editor id unknown (pm25)', E_USER_WARNING);
+            return false;
+        }
+    }
+
+
+
     public function getEditorList()
     {
         $pdo_ressource = new Database();

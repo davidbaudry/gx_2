@@ -4,6 +4,8 @@
 include_once '../includes/init.php';
 include_once INC . 'header.php';
 
+use Michelf\Markdown;
+
 $display_players_info = false;
 
 if ((isset($_GET['boardgame'])) and ((int)$_GET['boardgame'] > 0)) {
@@ -22,16 +24,28 @@ if ((isset($_GET['boardgame'])) and ((int)$_GET['boardgame'] > 0)) {
         ?>
         <article>
             <header>
-                <h1><?php echo $boardgame->getName(); ?></h1>
+                <h1>
+                    <span
+                        class="invert_bw"><?php echo $boardgame->getId(); ?></span> <?php echo $boardgame->getName(); ?>
+                </h1>
             </header>
+            > <a
+                href="<?php echo LINK_BASE_URL; ?>content/form-jeu.php?boardgame=<?php echo $boardgame->getId(); ?>">Modifier</a>
             <section>
-                <h2>Fiche <span class="invert_bw"><?php echo $boardgame->getId(); ?></span></h2>
                 <ul>
+                    <?php
+                    if ($boardgame->getImg_url()) {
+                        echo '<img src="' . $boardgame->getImg_url() . '">';
+                    }
+                    ?>
+                    <li class="cleanli">
+                        <?php echo Markdown::defaultTransform($boardgame->getDescription()); ?>
+                    </li>
                     <li class="cleanli">
                         Auteur : <a href="#"><?php echo $boardgame->getAuthor(); ?></a>
                     </li>
                     <li class="cleanli">
-                        Auteur 2 : <a href="#"><?php echo $boardgame->getAuthorSecondId(); ?></a>
+                        Auteur 2 : <a href="#"><?php echo $boardgame->getAuthorSecond(); ?></a>
                     </li>
                     <li class="cleanli">
                         Editeur : <a href="#"><?php echo $boardgame->getEditor(); ?></a>
@@ -45,11 +59,6 @@ if ((isset($_GET['boardgame'])) and ((int)$_GET['boardgame'] > 0)) {
                     <li class="cleanli">
                         Le score est inversé : <?php echo $boardgame->getHas_invert_score(); ?>
                     </li>
-                    <?php
-                    if ($boardgame->getImg_url()) {
-                        echo '<li class="cleanli"><img src="' . $boardgame->getImg_url() . '"></li>';
-                    }
-                    ?>
                 </ul>
             </section>
 
@@ -108,17 +117,15 @@ if ((isset($_GET['boardgame'])) and ((int)$_GET['boardgame'] > 0)) {
                     echo '<ul>';
                     foreach ($gameboard_plays_list as $gameboard_play) {
                         echo '<li class="cleanli">';
-                        echo 'Partie n°' . $gameboard_play['id'] . ', le ' . $gameboard_play['date'] . ' : ';
+                        echo '<strong>Partie n°' . $gameboard_play['id'] . ', le ' . $gameboard_play['date'] . ' : </strong>';
+                        echo '</li>';
                         // recherche les joueurs et scores
                         $boardgame_play_lines = $boardgame_plays_manager->getPlayersFromBoardgamePlayId($gameboard_play['id']);
-                        echo '<ul>';
                         foreach ($boardgame_play_lines as $boardgame_play_line) {
                             echo '<li class="cleanli">';
                             echo $boardgame_play_line['firstname'] . ' ' . $boardgame_play_line['lastname'] . ' : ' . $boardgame_play_line['score'];
                             echo '</li>';
                         }
-                        echo '</ul>';
-                        echo '</li>';
                     }
                     echo '</ul>';
                 }
@@ -144,5 +151,3 @@ if ((isset($_GET['boardgame'])) and ((int)$_GET['boardgame'] > 0)) {
 <?php
 
 include_once INC . 'footer.php';
-
-

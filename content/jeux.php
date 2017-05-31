@@ -3,6 +3,7 @@
 <?php
 include_once '../includes/init.php';
 include_once INC . 'header.php';
+
 ?>
 <a name="top"></a>
 <article>
@@ -44,14 +45,9 @@ include_once INC . 'header.php';
                 echo '<li class="cleanli">';
                 echo '<span class="invert_bw"> ' . str_pad($boardgame_current['id'], 3, "0",
                         STR_PAD_LEFT) . '</span>';
-                echo '  - ';
-                //echo '<a href="' . LINK_BASE_URL . 'content/fiche-jeu.php?g=' . $boardgame_current['id'] . '">' . $boardgame_current['gamename'] . '</a>';
-                echo '<strong>' . $boardgame_current['gamename'] . '</strong>';
-                echo '  - ';
-                echo '(';
-                echo $boardgame_current['firstname'] . ' ' . $boardgame_current['lastname'];
-                echo ')';
-                echo ' - ';
+                echo ' ' . '<strong>' . $boardgame_current['gamename'] . '</strong>';
+                echo ' / ' . $boardgame_current['firstname'] . ' ' . $boardgame_current['lastname'];
+                echo ' / ';
                 echo $boardgame_current['editorname'];
                 if ($boardgame_current['is_extension']) {
                     echo ' (e)';
