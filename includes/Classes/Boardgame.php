@@ -7,7 +7,7 @@
 class boardgame implements BoardgameInterface
 {
     use frenchDates;
-    
+
     // constantes de classe
     const NO_AUTHOR = 'Pas d\'auteur';
 
@@ -34,18 +34,13 @@ class boardgame implements BoardgameInterface
      */
     public function hydrate(array $boardgame_data)
     {
-        if ($boardgame_data) {
-            foreach ($boardgame_data as $key => $value) {
-                $method = 'set' . ucfirst($key);
-                if (method_exists($this, $method)) {
-                    $this->$method($value);
-                }
+        foreach ($boardgame_data as $key => $value) {
+            $method = 'set' . ucfirst($key);
+            if (method_exists($this, $method)) {
+                $this->$method($value);
             }
-        } else {
-            trigger_error('Boardgame id unknown (bg30)', E_USER_WARNING);
-            $this->setName('Unknown');
-            return false;
         }
+
     }
 
 

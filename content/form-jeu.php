@@ -4,16 +4,24 @@
 include_once '../includes/init.php';
 include_once INC . 'header.php';
 
+// Form case ?
 $form_mode = null;
 
-// Form case ?
 // todo : simplifier cette partie
+
+$form_h1_title = 'todo';
 
 // update case : id passed by url (GET) or form return (POST)
 if (isset($_POST['submit']) && ($_POST['submit'] === 'update')) {
-    $boardgame_id = (int)$_POST['boardgame_id'];
-    echo '***test';
-    var_dump($_POST);
+    $boardgame_id = (int)$_POST['id'];
+    // protection du post
+    /*foreach ($_POST as $key => $value) {
+        $_POST[$key] = htmlspecialchars($value);
+    }*/
+    // Call update boardgame method
+    $boardgame = new boardgame($_POST);
+    $boardgame_manager = new boardgameManager();
+    $boardgame_data = $boardgame_manager->update($boardgame);
 
 } else {
     if ((int)$_GET['boardgame'] > 0) {
@@ -29,7 +37,6 @@ if ($boardgame_id) {
     $boardgame_manager = new boardgameManager();
     $boardgame_data = $boardgame_manager->get($boardgame_id);
     $boardgame = new boardgame($boardgame_data);
-    var_dump($boardgame);
 }
 
 
@@ -60,12 +67,12 @@ $total_number_of_editors = $editor_list->count();
         <section>
             <form action="<?php echo LINK_BASE_URL ?>content/form-jeu.php" method="post">
                 <fieldset class="">
-                    <label for="foo">Nom : </label>
+                    <label for="name">Nom : </label>
                     <br/>
-                    <input name="name" size="25" type="text" placeholder="Nom du jeu"
+                    <input name="name" size="40" type="text" placeholder="Nom du jeu"
                            value="<?php echo $boardgame->getName(); ?>">
                     <br/>
-                    <label for="foo">Auteur(s) : (<?php echo $total_number_of_authors; ?>)
+                    <label for="author_id">Auteur(s) : (<?php echo $total_number_of_authors; ?>)
                         possibles</label>
                     <br/>
                     <select name="author_id">
@@ -82,6 +89,7 @@ $total_number_of_editors = $editor_list->count();
                         }
                         ?>
                     </select>
+                    &
                     <select name="author_second_id">
                         <?php
                         $author_list->rewind();
@@ -114,21 +122,38 @@ $total_number_of_editors = $editor_list->count();
                         ?>
                     </select>
                     <br/>
+                    <label for="img_url">Url image : </label>
+                    <br/>
+                    <input name="img_url" size="40" type="url" placeholder="Image url"
+                           value="<?php echo $boardgame->getImg_url(); ?>">
+                    <br/>
+                    <img src="<?php echo $boardgame->getImg_url(); ?>" alt="illustration du jeu"/>
+                    <br/>
+                    <label for="description">Description (use Markdown)</label>
+                    <br/>
+                    <textarea name="description" rows="3"
+                              cols="42"><?php echo $boardgame->getDescription(); ?></textarea>
+                    <br/>
                     <label for="foo">Extension ?</label><br/>
-                    <input type="radio" name="is_extension" value="1">Oui
-                    <input type="radio" name="is_extension" value="0" checked>Non
+                    <input type="radio" name="is_extension"
+                           value="1" <?php echo($boardgame->getIs_extension() == 1 ? 'checked' : ''); ?>>Oui
+                    <input type="radio" name="is_extension"
+                           value="0" <?php echo($boardgame->getIs_extension() == 0 ? 'checked' : ''); ?>>Non
                     <br/>
                     <label for="foo">Collaboratif ?</label><br/>
-                    <input type="radio" name="is_collaborative" value="1">Oui
-                    <input type="radio" name="is_collaborative" value="0" checked>Non
+                    <input type="radio" name="is_collaborative"
+                           value="1" <?php echo($boardgame->getIs_collaborative() == 1 ? 'checked' : ''); ?>>Oui
+                    <input type="radio" name="is_collaborative"
+                           value="0" <?php echo($boardgame->getIs_collaborative() == 0 ? 'checked' : ''); ?>>Non
                     <br/>
                     <label for="foo">Scores inversés ?</label><br/>
-                    <input type="radio" name="has_invert_score" value="1">Oui
-                    <input type="radio" name="has_invert_score" value="0" checked>Non
+                    <input type="radio" name="has_invert_score"
+                           value="1" <?php echo($boardgame->getHas_invert_score() == 1 ? 'checked' : ''); ?>>Oui
+                    <input type="radio" name="has_invert_score"
+                           value="0" <?php echo($boardgame->getHas_invert_score() == 0 ? 'checked' : ''); ?>>Non
                     <br/>
-                    <input name="description" size="25" type="hidden" value="...">
                     <hr class="hrclear"/>
-                    <input type="hidden" name="boardgame_id"
+                    <input type="hidden" name="id"
                            value="<?php echo $boardgame->getId(); ?>">
                     <button class="button1" type="submit" name="submit" value="update">Mettre à jour
                     </button>
